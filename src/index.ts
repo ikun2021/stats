@@ -1,24 +1,20 @@
 // 需要使用node standard library时
 //在命令行输入 npm install @types/node
 import fs from 'fs';    //fs-filesystem
+import { ConsoleTarget } from './ConsoleTarget';
+
 import { CsvReader } from './CsvReader';
+import { HtmlTarget } from './HtmlTarget';
 import { MatchReader } from './MatchReader';
-import { MatchResult } from './MatchResult';
-
-const reader = new MatchReader('football.csv');
-reader.read();
-const matches =reader.data;
-console.log(matches[0]);
+import { Summary } from './Summary';
+import { WinsAnalysis } from './WinsAnalysis';
 
 
-let manUnitedWins = 0;
+const csvReader = new CsvReader('football.csv');
 
-for(let match of matches){
-  if(match[1]==='Man United' && match[5] === MatchResult.HomeWin) {
-    manUnitedWins++;
-  }else if(match[2]==='Man United' && match[5] ===MatchResult.AwayWin){
-    manUnitedWins++;
-  }
-}
+const matchReader = new MatchReader(csvReader);
+matchReader.load();
 
-console.log(`Man United won ${manUnitedWins} games`);
+const summary = new Summary(new WinsAnalysis('Man United'),new HtmlTarget());
+
+summary.buildAndPrintReport(matchReader.matches);

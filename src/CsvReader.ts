@@ -1,17 +1,16 @@
 import  fs  from "fs";
-import { MatchResult } from "./MatchResult";
-import { dataStringToDate } from "./utils";
 
-//define a tuple that represents a row
-export type MatchData = [Date,string,string,number,number,MatchResult,string];
+export interface DataReader {
+  read():void;
+  data:string[][];
+}
 
-//泛型的使用
-export abstract class CsvReader<T>{
-  data:T[] = [];
+
+//CsvReader 实现DataReader接口
+export class CsvReader{
+  data:string[][] = [];
 
   constructor(public fileName:string){}
-
-  abstract mapRow(row:string[]):T;
 
   read():void{
     this.data = fs
@@ -23,7 +22,7 @@ export abstract class CsvReader<T>{
       (row:string):string[] => {
         return row.split(',');
       }
-    )
-    .map(this.mapRow);  //传入方法的reference，不用执行！！
+    );
+    
   }
 }

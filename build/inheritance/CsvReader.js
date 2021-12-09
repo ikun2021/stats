@@ -5,7 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CsvReader = void 0;
 const fs_1 = __importDefault(require("fs"));
-//CsvReader 实现DataReader接口
+//泛型的使用
 class CsvReader {
     constructor(fileName) {
         this.fileName = fileName;
@@ -19,7 +19,8 @@ class CsvReader {
             .split('\n')
             .map((row) => {
             return row.split(',');
-        });
+        })
+            .map(this.mapRow); //传入方法的reference，不用执行！！
     }
 }
 exports.CsvReader = CsvReader;
